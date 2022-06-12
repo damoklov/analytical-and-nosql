@@ -13,10 +13,13 @@ app = Flask(__name__)
 def load_file():
     os.environ["CHOICE"] = "CONSOLE"
     endpoint = request.args.get("path")
+
     if not endpoint:
         return "Provide path"
+
     r = requests.get(endpoint)
     print(os.environ["CHOICE"])
+
     if os.environ["CHOICE"] == 'CONSOLE':
         context = Context(ConsoleStrategy())
         print("Client: Strategy is set to console output.")
@@ -28,6 +31,7 @@ def load_file():
     else:
         print("Something went wrong")
         return "NOT OK"
+
     return "OK"
 
 
