@@ -15,12 +15,12 @@ class Context:
     def strategy(self, strategy: Strategy) -> None:
         self._strategy = strategy
 
-    def do_some_business_logic(self, data) -> None:
-        result = self._strategy.do_algorithm(data)
+    def do_some_business_logic(self, filename, data) -> None:
+        self._strategy.do_algorithm(filename, data)
 
 
 class Strategy(ABC):
 
     @abstractmethod
-    def do_algorithm(self, data):
+    def do_algorithm(self, filename, data):
         pass
