@@ -1,0 +1,7 @@
+azure-core
+azure-eventhub
+azure-eventhub-checkpointstoreblob-aio
+Flask
+redis
+requests
+asyncio
