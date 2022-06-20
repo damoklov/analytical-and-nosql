@@ -3,7 +3,8 @@ import requests
 import os
 
 from strategies.console_strategy import ConsoleStrategy
-from strategies.kafka_strategy import ConcreteStrategyB
+from strategies.file_strategy import FileStrategy
+from strategies.kafka_strategy import KafkaStrategy
 from strategies.utils import Context
 
 app = Flask(__name__)
@@ -11,23 +12,25 @@ app = Flask(__name__)
 
 @app.route('/')
 def load_file():
-    os.environ["CHOICE"] = "CONSOLE"
     endpoint = request.args.get("path")
 
     if not endpoint:
         return "Provide path"
 
     r = requests.get(endpoint)
-    print(os.environ["CHOICE"])
 
     if os.environ["CHOICE"] == 'CONSOLE':
         context = Context(ConsoleStrategy())
         print("Client: Strategy is set to console output.")
-        context.do_some_business_logic(r.json())
+        context.do_some_business_logic(endpoint, r.json())
     elif os.environ["CHOICE"] == 'CLOUD':
-        context = Context(ConcreteStrategyB())
+        context = Context(KafkaStrategy())
         print("Client: Strategy is set to cloud output.")
-        context.do_some_business_logic(r.json())
+        context.do_some_business_logic(endpoint, r.json())
+    elif os.environ["CHOICE"] == 'FILE':
+        context = Context(FileStrategy())
+        print("Client: Strategy is set to file output.")
+        context.do_some_business_logic(endpoint, r.json())
     else:
         print("Something went wrong")
         return "NOT OK"
@@ -36,4 +39,5 @@ def load_file():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
+
